@@ -1,0 +1,163 @@
+:root
+{
+    --hightlight: #ff474d;
+    --backcol : #2a2a2e;
+    --darkbackcol : #151517;
+}
+
+@font-face{
+    font-family: "FontFamilyChoosed";
+    src: url(../assets/font.otf) format("opentype");
+}
+
+[onclick]{
+  cursor: pointer;
+}
+
+a{
+  color: var(--hightlight);
+  cursor: pointer;
+  text-decoration: none;
+}
+a.folder{
+  color: white;
+}
+
+body{
+  background-color: var(--darkbackcol);
+  color: white;
+  font-family: "FontFamilyChoosed", serif;
+  font-size: 2em;
+  margin: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+details > summary{
+  cursor: pointer;
+}
+details > summary:first-of-type {
+  list-style-type: none;
+}
+
+header{
+  background-color: white;
+  color: black;
+  padding: 8px;
+}
+header div{
+  display: inline-block;
+  vertical-align: middle;
+  width: 50%;
+}
+header div img{
+  vertical-align: middle;
+}
+header div span{
+  font-size: 1.5em;
+  vertical-align: middle;
+}
+
+input{
+  font-family: "FontFamilyChoosed", serif;
+}
+
+footer{
+  padding: 8px;
+}
+
+#album-container{
+  border: 4px solid red;
+}
+
+#edit-mode{
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  width: 10%;
+  min-width: 64px;
+}
+#edit-mode:hover{
+  background-color: rgba(0,0,0,0.5);
+}
+
+#informations{
+  text-align: left;
+}
+
+#main{
+  background-color: var(--backcol);
+  padding: 1%;
+}
+
+.cadre-photo{
+  border: 2px solid white;
+  display: inline-block;
+  width: 45%;
+  margin: 1%;
+  padding: 0px;
+  height: 320px;
+  /*line-height: 0;*/
+}
+
+.cadre-photo img{
+  display: inline-block;
+  width: 80%;
+  height: 100%;
+}
+
+.delete{
+  position: relative;
+  opacity: 0.5;
+  top:0;
+  right:0;
+  width: 50%;
+}
+.delete:hover{
+  opacity: 1;
+}
+
+.description{
+  display: inline-block;
+  background-color: var(--darkbackcol);
+  height: 100%;
+  width: 20%;
+  vertical-align: top;
+  overflow: auto;
+}
+
+.folder{
+  background-image: url(../assets/folder.png);
+  background-size: cover;
+  display: table-cell;
+  vertical-align: bottom;
+  padding: 8px;
+  height: 135px;
+  width: 160px;
+}
+
+.hightlight{
+  color: var(--hightlight);
+}
+
+@media only screen and (max-width: 900px) {
+  body{
+    font-size: 1.4em;
+  }
+  .folder{
+    font-size: 2em;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  body{
+    font-size: 1em;
+  }
+  .cadre-photo{
+    width: 99%;
+  }
+  .folder{
+    font-size: 2em;
+  }
+}
