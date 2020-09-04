@@ -1,5 +1,5 @@
 <?php
-  echo 'CC BY-SA 4.0 <a href="https://creativecommons.org/licenses/by-sa/4.0/">>></a><br/>github link <a href="">>></a>'
+  echo 'CC BY-SA 4.0 <a href="https://creativecommons.org/licenses/by-sa/4.0/">>></a><br/>github link <a href="https://github.com/Stern-Hillpocken/fotos">>></a>'
 ?>
 <script>
 if("<?php echo isset($_GET['scroll']); ?>" > 0){

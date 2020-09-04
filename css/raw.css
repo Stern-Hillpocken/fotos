@@ -61,14 +61,11 @@ header div span{
 
 input{
   font-family: "FontFamilyChoosed", serif;
+  font-size: 0.7em;
 }
 
 footer{
   padding: 8px;
-}
-
-#album-container{
-  border: 4px solid red;
 }
 
 #edit-mode{
@@ -76,7 +73,6 @@ footer{
   right: 0;
   position: fixed;
   width: 10%;
-  min-width: 64px;
 }
 #edit-mode:hover{
   background-color: rgba(0,0,0,0.5);
@@ -107,17 +103,6 @@ footer{
   height: 100%;
 }
 
-.delete{
-  position: relative;
-  opacity: 0.5;
-  top:0;
-  right:0;
-  width: 50%;
-}
-.delete:hover{
-  opacity: 1;
-}
-
 .description{
   display: inline-block;
   background-color: var(--darkbackcol);
@@ -135,6 +120,9 @@ footer{
   padding: 8px;
   height: 135px;
   width: 160px;
+}
+.folder:hover{
+  filter: grayscale(100%);
 }
 
 .hightlight{
@@ -155,7 +143,7 @@ footer{
     font-size: 1em;
   }
   .cadre-photo{
-    width: 99%;
+    width: 98%;
   }
   .folder{
     font-size: 2em;
