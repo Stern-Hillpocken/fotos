@@ -1,0 +1,4 @@
+<info>My <u>own'</u> de''c
+ription i'
+fin</info>
+2e ligne

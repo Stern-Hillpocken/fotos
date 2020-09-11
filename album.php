@@ -12,21 +12,38 @@ session_start();
 
         <?php
         if(file_exists('./storage/'.$_GET['a'].'/informations.txt')){
-          $informations = fopen('./storage/'.$_GET['a'].'/informations.txt', 'r');
-          $info = fgets($informations);
-          fclose($informations);
+          $info = file('./storage/'.$_GET['a'].'/informations.txt', FILE_SKIP_EMPTY_LINES);
+          if(count($info) === 1){
+            $folderInfo = $info[0];
+          } else {
+            $folderInfo = '';
+            for($i = 0; $i < count($info); $i++){
+              $readLine = substr($info[$i], 0, strlen($info[$i])-2);//remove line break
+              if($i === count($info)-1){
+                $i = count($info);
+              }
+              $folderInfo .= $readLine;
+              if(preg_match('/<\/info>/', $readLine) === 1){$i = count($info);}
+              if($i != count($info)){$folderInfo .= '<br/>';}
+            }
+          }
         } else {
-          $info = '';
+          $folderInfo = '';
         }
         ?>
 
         <script type="text/javascript">
-          let info = "<?php echo $info; ?>";
+          let folderInfo = `<?php echo $folderInfo; ?>`;
+          folderInfo = folderInfo.replace(/<br\/>/g, '\n');
+          folderInfo = folderInfo.replace('<info>', '');
+          folderInfo = folderInfo.replace('</info>', '');
+          console.log(folderInfo);
           function clearPopup(){
             document.getElementById("popup").innerHTML = '';
           }
           function doEditInfo(folder){
-            document.getElementById("popup").innerHTML = '<div id=double-check>Modifier les informations du dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><form method=POST action="./php/edit-info.php"><input type="hidden" name="album_name" value="'+folder+'"><input type=text name=informations value="'+info+'" style="width:90%"><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Modifier"></div></form></div>';
+            document.getElementById("popup").innerHTML = '<div id=double-check>Modifier les informations du dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><form method=POST action="./php/edit-info.php"><input type="hidden" name="album_name" value="'+folder+'"><textarea name=informations style="min-width:90vw; max-width:90vw; min-height:20vh; max-height:85vh">'+folderInfo+'</textarea><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Modifier"></div></form></div>';
+            //<input type=text name=informations value="'+folderInfo+'" style="width:90%">
           }
           function doAddPicture(folder){
             document.getElementById("popup").innerHTML = '<div id=double-check>Ajouter des images au dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><form method=POST action="./php/upload.php" enctype="multipart/form-data"><input type="hidden" name="album_name" value="'+folder+'"><input type="file" name="pictures[]" required multiple><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Ajouter"></div></form></div>';
@@ -53,7 +70,7 @@ session_start();
           ?>
           </h1>
           <p>
-          <?php echo $info; ?>
+          <?php echo $folderInfo; ?>
           </p>
         </div>
         <div id="album-container">
