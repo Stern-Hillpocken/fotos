@@ -13,18 +13,17 @@ session_start();
         <?php
         if(file_exists('./storage/'.$_GET['a'].'/informations.txt')){
           $info = file('./storage/'.$_GET['a'].'/informations.txt', FILE_SKIP_EMPTY_LINES);
-          if(count($info) === 1){
-            $folderInfo = $info[0];
-          } else {
-            $folderInfo = '';
-            for($i = 0; $i < count($info); $i++){
-              $readLine = substr($info[$i], 0, strlen($info[$i])-2);//remove line break
-              if($i === count($info)-1){
-                $i = count($info);
-              }
-              $folderInfo .= $readLine;
-              if(preg_match('/<\/info>/', $readLine) === 1){$i = count($info);}
-              if($i != count($info)){$folderInfo .= '<br/>';}
+          $folderInfo = '';
+          for($i = 0; $i < count($info); $i++){
+            $readLine = substr($info[$i], 0, strlen($info[$i])-2);//remove line break
+            if($i === count($info)-1){//</info>$ @ end of file
+              $readLine = substr($info[$i], 0, strlen($info[$i]));
+            }
+            $folderInfo .= $readLine;
+            if(preg_match('/<\/info>/', $readLine) === 1){//end reading
+              $i = count($info);
+            } else {
+              $folderInfo .= '<br/>';
             }
           }
         } else {
@@ -43,7 +42,6 @@ session_start();
           }
           function doEditInfo(folder){
             document.getElementById("popup").innerHTML = '<div id=double-check>Modifier les informations du dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><form method=POST action="./php/edit-info.php"><input type="hidden" name="album_name" value="'+folder+'"><textarea name=informations style="min-width:90vw; max-width:90vw; min-height:20vh; max-height:85vh">'+folderInfo+'</textarea><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Modifier"></div></form></div>';
-            //<input type=text name=informations value="'+folderInfo+'" style="width:90%">
           }
           function doAddPicture(folder){
             document.getElementById("popup").innerHTML = '<div id=double-check>Ajouter des images au dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><form method=POST action="./php/upload.php" enctype="multipart/form-data"><input type="hidden" name="album_name" value="'+folder+'"><input type="file" name="pictures[]" required multiple><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Ajouter"></div></form></div>';
@@ -65,7 +63,7 @@ session_start();
           <?php
             echo $_GET['a'];
             if(isset($_SESSION['edit_mode']) AND $_SESSION['edit_mode'] == 'on'){
-              echo '<a onclick=doEditInfo("'.$_GET['a'].'") title="Modifier les informations ?">✏️</a> <a onclick=doAddPicture("'.$_GET['a'].'") title="Ajouter des images ?">🖼️</a>';
+              echo '<a onclick="doEditInfo(`'.$_GET['a'].'`)" title="Modifier les informations ?">✏️</a> <a onclick="doAddPicture(`'.$_GET['a'].'`)" title="Ajouter des images ?">🖼️</a>';
             }
           ?>
           </h1>
@@ -100,7 +98,7 @@ function ScanDirectory($Directory){
           $date = substr($sections[1], 0, 4).' '.$month.' '.substr($sections[1], 6, 2);
           $time = substr($sections[2], 0, 2).':'.substr($sections[2], 2, 2).':'.substr($sections[2], 4, 2);
         }
-        echo '<div class=edit-buttons><a onclick=doRemoveFile("'.$_GET['a'].'","'.$arrayNames[$i].'") title="Supprimer le fichier ?">❌ Supprimer</a><br/>📅 '.$date.'<br/>⌚'.$time.'<br/><a onclick=doEditFile("'.$_GET['a'].'","'.$arrayNames[$i].'") title="Modifier le fichier ?">✏️ Modifier</a></div>';
+        echo '<div class=edit-buttons><a onclick="doRemoveFile(`'.$_GET['a'].'`,`'.$arrayNames[$i].'`)" title="Supprimer le fichier ?">❌ Supprimer</a><br/>📅 '.$date.'<br/>⌚'.$time.'<br/><a onclick="doEditFile(`'.$_GET['a'].'`,`'.$arrayNames[$i].'`)" title="Modifier le fichier ?">✏️ Modifier</a></div>';
         echo '<img src="storage/'.$_GET['a'].'/'.$arrayNames[$i].'" />';
       } else {
         echo '<a href="storage/'.$_GET['a'].'/'.$arrayNames[$i].'"><img src="storage/'.$_GET['a'].'/'.$arrayNames[$i].'" /></a>';

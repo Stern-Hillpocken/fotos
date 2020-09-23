@@ -8,6 +8,13 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp") {
 
     $info = $_POST['informations'];
     $info = str_replace('`', "'", $info);
+    $info = str_replace('<', '[', $info); $info = str_replace('>', ']', $info);
+    $info = str_replace('[b]', '<b>', $info); $info = str_replace('[/b]', '</b>', $info);
+    $info = str_replace('[c]', '<span class=hightlight>', $info); $info = str_replace('[/c]', '</span>', $info);
+    $info = str_replace('[span class=hightlight]', '<span class=hightlight>', $info); $info = str_replace('[/span]', '</span>', $info);
+    $info = str_replace('[i]', '<b>', $info); $info = str_replace('[/b]', '</b>', $info);
+    $info = str_replace('[s]', '<s>', $info); $info = str_replace('[/s]', '</s>', $info);
+    $info = str_replace('[u]', '<u>', $info); $info = str_replace('[/u]', '</u>', $info);
     $info = str_replace('<info>', '', $info);
     $info = str_replace('</info>', '', $info);
 
@@ -22,5 +29,7 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp") {
     file_put_contents($dir, $contents);
   }
   header('Location: ../album.php?a='.$_POST['album_name']);
+} else {
+  header('Location: ./../');
 }
 ?>

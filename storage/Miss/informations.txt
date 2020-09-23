@@ -1,4 +1,0 @@
-<info>Description <u>de</u> l'album
-Deuxième L
-3...</info>
-Dernière ligne

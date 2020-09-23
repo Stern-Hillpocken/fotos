@@ -38,7 +38,7 @@ function ScanDirectory($Directory){
     for($i = 0; $i < count($arrayNames); $i ++){
       echo '<div style="display: inline-block; margin: 16px;"><a href="album.php?a='.$arrayNames[$i].'" class="folder">'.$arrayNames[$i].'</a>';
       if(isset($_SESSION['edit_mode']) AND $_SESSION['edit_mode'] == 'on'){
-        echo '<a onclick=doRemoveFolder("'.$arrayNames[$i].'") title="Supprimer le dossier ?">❌</a>';
+        echo '<a onclick="doRemoveFolder(`'.$arrayNames[$i].'`)" title="Supprimer le dossier ?">❌</a>';
       }
       echo '</div>';
     }
