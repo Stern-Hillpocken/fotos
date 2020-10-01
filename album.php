@@ -19,6 +19,9 @@ session_start();
             if($i === count($info)-1){//</info>$ @ end of file
               $readLine = substr($info[$i], 0, strlen($info[$i]));
             }
+            if(preg_match('/<\/info>$/', $info[$i]) === 1){//</info>$ @ end of line
+              $readLine = substr($info[$i], 0, strlen($info[$i])-1);
+            }
             $folderInfo .= $readLine;
             if(preg_match('/<\/info>/', $readLine) === 1){//end reading
               $i = count($info);
@@ -41,7 +44,7 @@ session_start();
             document.getElementById("popup").innerHTML = '';
           }
           function doEditInfo(folder){
-            document.getElementById("popup").innerHTML = '<div id=double-check>Modifier les informations du dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><form method=POST action="./php/edit-info.php"><input type="hidden" name="album_name" value="'+folder+'"><textarea name=informations style="min-width:90vw; max-width:90vw; min-height:20vh; max-height:85vh">'+folderInfo+'</textarea><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Modifier"></div></form></div>';
+            document.getElementById("popup").innerHTML = '<div id=double-check>Modifier les informations du dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><form method=POST action="./php/edit-info.php"><input type="hidden" name="album_name" value="'+folder+'">Titre : <input type="text" value="'+folder+'" name="new_album_name" required><br/>Description :<br/><textarea name=informations style="min-width:90vw; max-width:90vw; min-height:20vh; max-height:85vh">'+folderInfo+'</textarea><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Modifier"></div></form></div>';
           }
           function doAddPicture(folder){
             document.getElementById("popup").innerHTML = '<div id=double-check>Ajouter des images au dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><form method=POST action="./php/upload.php" enctype="multipart/form-data"><input type="hidden" name="album_name" value="'+folder+'"><input type="file" name="pictures[]" required multiple><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Ajouter"></div></form></div>';
@@ -49,8 +52,8 @@ session_start();
           function doRemoveFile(folder, file){
             document.getElementById("popup").innerHTML = '<div id=double-check>Voulez vous supprimer le fichier<br/><span id=double-check-value>'+file+'</span> ?<br/><img src="./storage/'+folder+'/'+file+'" style="height:25%"><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><a href="./php/rmfile.php?folder='+folder+'&file='+file+'">☑️ Supprimer</a></div></div>';
           }
-          function doEditFile(folder, file){
-            document.getElementById("popup").innerHTML = '<div id=double-check>Modifier le fichier<br/><span id=double-check-value>'+file+'</span> ?<br/><img src="./storage/'+folder+'/'+file+'" style="height:25%"><br/><form method=POST action="./php/edit-file.php" enctype="multipart/form-data"><input type="hidden" name="album_name" value="'+folder+'"><input type="hidden" name="file_name" value="'+file+'"><label for=file_new_name>Nom du fichier : </label><input name=file_new_name type=text placeholder="IMG_yyyymmdd_hhmmss.jpg"><br/><label for=description>Description : </label><input name=description type=text><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Changer"></div></form></div>';
+          function doEditFile(folder, file, desc){
+            document.getElementById("popup").innerHTML = '<div id=double-check>Modifier le fichier<br/><span id=double-check-value>'+file+'</span> ?<br/><img src="./storage/'+folder+'/'+file+'" style="height:25%"><br/><form method=POST action="./php/edit-file.php" enctype="multipart/form-data"><input type="hidden" name="album_name" value="'+folder+'"><input type="hidden" name="file_name" value="'+file+'"><label for=file_new_name>Nom du fichier : </label><input name=file_new_name type=text placeholder="IMG_yyyymmdd_hhmmss.jpg"><br/><label for=description>Description : </label><input name=description type=text value="'+desc+'"><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Changer"></div></form></div>';
           }
         </script>
     </head>
@@ -86,6 +89,35 @@ function ScanDirectory($Directory){
     sort($arrayNames);
     for($i = 0; $i < count($arrayNames); $i ++){
       echo '<div class=cadre-photo>';
+      //IMAGE DESCRIPTION
+      $divDescription = '';
+      $imgStyle = "width:100%;";
+      if(file_exists('./storage/'.$_GET['a'].'/informations.txt')){
+        $fileDescription = ' ';
+        //grep
+        $info = file('./storage/'.$_GET['a'].'/informations.txt', FILE_SKIP_EMPTY_LINES);
+        for($j = 0; $j < count($info); $j++){
+          $readLine = substr($info[$j], 0, strlen($info[$j])-1);//remove line break
+          if($j === count($info)-1){// end of file
+            $readLine = substr($info[$j], 0, strlen($info[$j]));
+          }
+          if(preg_match('/^#'.$arrayNames[$i].'/', $readLine) === 1){
+            preg_match('/#'.$arrayNames[$i].' (...*)/', $readLine, $out);
+            if(isset($out[1])){
+              $fileDescription = $out[1];
+            }
+          }
+        }
+        //display
+        if($fileDescription != ' '){
+          $divDescription = '<div class=description>'.$fileDescription.'</div>';
+          $imgStyle = "width:80%;";
+        }
+      } else {
+        $divDescription = '<div class=description>Manque le fichier informations.txt</div>';
+      }
+
+      //EDIT MODE INFORMATIONS
       if(isset($_SESSION['edit_mode']) AND $_SESSION['edit_mode'] == 'on'){
         $date = '?';
         $time = '?';
@@ -98,12 +130,14 @@ function ScanDirectory($Directory){
           $date = substr($sections[1], 0, 4).' '.$month.' '.substr($sections[1], 6, 2);
           $time = substr($sections[2], 0, 2).':'.substr($sections[2], 2, 2).':'.substr($sections[2], 4, 2);
         }
-        echo '<div class=edit-buttons><a onclick="doRemoveFile(`'.$_GET['a'].'`,`'.$arrayNames[$i].'`)" title="Supprimer le fichier ?">❌ Supprimer</a><br/>📅 '.$date.'<br/>⌚'.$time.'<br/><a onclick="doEditFile(`'.$_GET['a'].'`,`'.$arrayNames[$i].'`)" title="Modifier le fichier ?">✏️ Modifier</a></div>';
-        echo '<img src="storage/'.$_GET['a'].'/'.$arrayNames[$i].'" />';
+        echo '<div class=edit-buttons><a onclick="doRemoveFile(`'.$_GET['a'].'`,`'.$arrayNames[$i].'`)" title="Supprimer le fichier ?">❌ Supprimer</a><br/>📅 '.$date.'<br/>⌚'.$time.'<br/><a onclick="doEditFile(`'.$_GET['a'].'`,`'.$arrayNames[$i].'`,`'.$fileDescription.'`)" title="Modifier le fichier ?">✏️ Modifier</a></div>';
+        echo '<img src="storage/'.$_GET['a'].'/'.$arrayNames[$i].'" style="'.$imgStyle.'" />';
       } else {
-        echo '<a href="storage/'.$_GET['a'].'/'.$arrayNames[$i].'"><img src="storage/'.$_GET['a'].'/'.$arrayNames[$i].'" /></a>';
+        echo '<a href="storage/'.$_GET['a'].'/'.$arrayNames[$i].'"><img src="storage/'.$_GET['a'].'/'.$arrayNames[$i].'" style="'.$imgStyle.'" /></a>';
       }
-      echo '<div class=description>txt<br/>oijfdigjfg fiuhgfuhfg fhjgufh hfhgufg hfughfugh hufg hufhugifuhd ui hfdiu ui hud hf dhdf ugdf hgfd hghdf  gdfuih gdfhu ghf hidf gdfi gdfhu gdfuih gf ugu</div></div>';
+      //
+      echo $divDescription;
+      echo '</div>';
     }
   closedir($MyDirectory);
 }

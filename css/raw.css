@@ -104,11 +104,11 @@ footer{
   padding: 0px;
   height: 320px;
   /*line-height: 0;*/
+  /*overflow: hidden;*/
 }
 
 .cadre-photo img{
   display: inline-block;
-  width: 80%;
   height: 100%;
 }
 

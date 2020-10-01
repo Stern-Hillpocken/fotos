@@ -34,9 +34,11 @@ if (!isset($_SESSION['password']) OR $_SESSION['password'] != "mdp")
 		  $erreur = 'L\'image est trop lourde...';
 		}*/
 		if($e === ''){//Pas d'erreurs pour le fichier en cours
-		     if(!move_uploaded_file($_FILES['pictures']['tmp_name'][$i], $dossier . $fichier)) {//Si la fonction renvoie TRUE, c'est que ça a fonctionné...
+		     if(move_uploaded_file($_FILES['pictures']['tmp_name'][$i], $dossier . $fichier)) {//Si la fonction renvoie TRUE, c'est que ça a fonctionné...
 					 //On ajoute une ligne de texte dans le fichier d'information
-					 TODO
+					 $informations = fopen('../storage/'.$dossier.'/informations.txt', 'a+');
+					 fputs($informations, "\n".'#'.$fichier.' ');
+					 fclose($informations);
 		     } else {
 					 $erreurs .= $fichier.' upload impossible.<br/>';
 				 }
