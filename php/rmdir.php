@@ -21,6 +21,7 @@
 
   if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp" AND isset($_GET['folder']) AND is_dir('../storage/'.$_GET['folder'])) {
     deleteDirectory('../storage/'.$_GET['folder']);
+    $_SESSION['feedback'] .= '<br/>✔️ Dossier supprimé.';
     header('Location: ../');
   } else {
     header('Location: ./../');

@@ -18,19 +18,19 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp") {
     }
     //
     if(file_exists('../storage/'.$dossier) AND $dossier !== $_POST['album_name']){
-      $erreur = 'Dossier (ou au moins le nom) déjà existant !';
+      $erreur = '<br/><span class=hightlight>⚠️ Nom de dossier déjà existant !</span>';
     }
 //
     if(!isset($erreur)){
       if($dossier !== $_POST['album_name']){
-        echo 'Nom de dossier changé ! '.$_POST['album_name'].' > '.$dossier;
+        $_SESSION['feedback'] .= '<br/>✔️ Nom de dossier changé : '.$_POST['album_name'].' > '.$dossier;
         rename('../storage/'.$_POST['album_name'], '../storage/'.$dossier);
         $_POST['album_name'] = $dossier;
       } else {
         echo 'Pas besoin de changer le nom.';
       }
     } else {
-      echo $erreur;
+      $_SESSION['feedback'] .= $erreur;
     }
 
   }
@@ -59,6 +59,7 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp") {
     $contents = str_replace('<info></info>', '<info>'.$info.'</info>', $contents);
 
     file_put_contents($dir, $contents);
+    $_SESSION['feedback'] .= '<br/>✔️ Informations mises à jour.';
   }
   header('Location: ../album.php?a='.$_POST['album_name']);
 } else {

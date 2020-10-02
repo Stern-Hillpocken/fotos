@@ -1,6 +1,0 @@
-<info>Description du dossier...
-Et des autres !</info>
-#IMG_20201001_091743.jpg Un beau <span class=hightlight>Rouge</span> et <u>un</u> beau bleu ! 
-#IMG_20201002_091743.jpg Vert et bleu
-#IMG_20201901_091743.jpg Orange & indigo
-#IMG_20190807_090807.jpg 

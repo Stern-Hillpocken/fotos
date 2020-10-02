@@ -4,7 +4,7 @@ session_start();
 if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp") {
   if(file_exists('../storage/'.$_POST['album_name'].'/'.$_POST['file_name']) AND !file_exists('../storage/'.$_POST['album_name'].'/'.$_POST['file_new_name'])){
     rename('../storage/'.$_POST['album_name'].'/'.$_POST['file_name'], '../storage/'.$_POST['album_name'].'/'.$_POST['file_new_name']);
-    echo 'Nom de fichier changé !';
+    $_SESSION['feedback'] .= '<br/>✔️ Nom de fichier changé !';
     //format of name.jpg and change
     $dir = '../storage/'.$_POST['album_name'].'/informations.txt';
     $contents = file_get_contents($dir);
@@ -24,10 +24,10 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp") {
   } else if($_POST['file_new_name'] === '') {
     echo 'Pas besoin de changer le nom du fichier.';
   } else {
-    echo 'Le fichier '.'../storage/'.$_POST['album_name'].'/'.$_POST['file_new_name'].' existe déjà !';
+    $_SESSION['feedback'] .= '<br/><span class=hightlight>⚠️ Le fichier '.$_POST['file_new_name'].' existe déjà !</span>';
   }
   if(isset($_POST['description'])){
-    echo 'Mise à jour de la description.';
+    $_SESSION['feedback'] .= '<br/>✔️ Mise à jour de la description effectuée.';
     $dir = '../storage/'.$_POST['album_name'].'/informations.txt';
     $contents = file_get_contents($dir);
 
@@ -49,6 +49,7 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp") {
     $contents = substr_replace($contents,' '.$info,$startInfo,$endInfo);
     file_put_contents($dir, $contents);
   }
+  $_SESSION['scroll'] = $_POST['scroll'];
   header('Location: ../album.php?a='.$_POST['album_name']);
 } else {
   header('Location: ./../');

@@ -7,7 +7,7 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp" AND $_POST['
   $dossier = strtr($dossier, $unwanted_array);
   $dossier = preg_replace('/([^.a-z0-9]+)/i', ' ', $dossier);
   if(file_exists('../storage/'.$dossier)){
-		$erreur = 'Dossier (ou au moins le nom) déjà existant !';
+		$erreur = '<br/><span class=hightlight>⚠️ Nom de dossier déjà existant !</span>';
 	}
   //remove firsts space
   while(substr($dossier,0,1) === ' '){
@@ -20,17 +20,18 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp" AND $_POST['
 //
   if(!isset($erreur)){
 	     if(mkdir('../storage/'.$dossier, 0707)){
-	          echo 'Dossier créé avec succès !';
+	          $_SESSION['feedback'] .= '<br/>✔️ Dossier créé avec succès !';
             $informations = fopen('../storage/'.$dossier.'/informations.txt', 'a+');
             fputs($informations, "<info>Description du dossier...</info>");
             fclose($informations);
             header('Location: ../');
 	     } else {
-	          echo 'Echec de permission !';
+	          $_SESSION['feedback'] .= '<br/><span class=highlight>⚠️ Echec de permission !</span>';
 	     }
 	} else {
-	     echo $erreur;
+	     $_SESSION['feedback'] .= $erreur;
 	}
+  header('Location: ./../');
 } else {
   header('Location: ./../');
 }

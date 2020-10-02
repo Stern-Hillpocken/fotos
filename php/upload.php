@@ -17,11 +17,11 @@ if (!isset($_SESSION['password']) OR $_SESSION['password'] != "mdp")
 		$extension = strrchr($_FILES['pictures']['name'][$i], '.');
 		//Début des vérifications de sécurité...
 		if(!in_array($extension, $extensions)){
-		  $erreurs .= $fichier.' : Vous devez uploader un fichier de type : png, gif, jpg, jpeg<br/>';
+		  $erreurs .= '<br/><span class=hightlight>⚠️ '.$fichier.' : Vous devez uploader un fichier de type : png, gif, jpg, jpeg !</span>';
 			$e = 'error : file type';
 		}
 		if(file_exists($dossier.$fichier)){
-			$erreurs .= $fichier.' : L\'image (ou au moins le nom) est déjà existante !<br/>';
+			$erreurs .= '<br/><span class=hightlight>⚠️ '.$fichier.' : L\'image (ou au moins le nom) est déjà existante !</span>';
 			$e = 'error : file name';
 		}
 		//On formate le nom du fichier
@@ -39,17 +39,17 @@ if (!isset($_SESSION['password']) OR $_SESSION['password'] != "mdp")
 					 $informations = fopen('../storage/'.$dossier.'/informations.txt', 'a+');
 					 fputs($informations, "\n".'#'.$fichier.' ');
 					 fclose($informations);
+					 $_SESSION['feedback'] .= '<br/>✔️ Transfert effectué.';
 		     } else {
-					 $erreurs .= $fichier.' upload impossible.<br/>';
+					 $erreurs .= '<br/><span class=hightlight>⚠️ '.$fichier.' upload impossible !</span>';
 				 }
 		}
 	}//end for
 
 	if($erreurs !== ''){
-		echo $erreurs.'<a href="../album.php?a='.$_POST['album_name'].'">Retour</a>';
-	} else {
-		header('Location: ../album.php?a='.$_POST['album_name']);
+		$_SESSION['feedback'] .= '<br/><span class=hightlight>'.$erreurs.'</span>';
 	}
+	header('Location: ../album.php?a='.$_POST['album_name']);
 }
 
 ?>

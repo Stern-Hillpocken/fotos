@@ -39,7 +39,6 @@ session_start();
           folderInfo = folderInfo.replace(/<br\/>/g, '\n');
           folderInfo = folderInfo.replace('<info>', '');
           folderInfo = folderInfo.replace('</info>', '');
-          console.log(folderInfo);
           function clearPopup(){
             document.getElementById("popup").innerHTML = '';
           }
@@ -50,10 +49,10 @@ session_start();
             document.getElementById("popup").innerHTML = '<div id=double-check>Ajouter des images au dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><form method=POST action="./php/upload.php" enctype="multipart/form-data"><input type="hidden" name="album_name" value="'+folder+'"><input type="file" name="pictures[]" required multiple><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Ajouter"></div></form></div>';
           }
           function doRemoveFile(folder, file){
-            document.getElementById("popup").innerHTML = '<div id=double-check>Voulez vous supprimer le fichier<br/><span id=double-check-value>'+file+'</span> ?<br/><img src="./storage/'+folder+'/'+file+'" style="height:25%"><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><a href="./php/rmfile.php?folder='+folder+'&file='+file+'">☑️ Supprimer</a></div></div>';
+            document.getElementById("popup").innerHTML = '<div id=double-check>Voulez vous supprimer le fichier<br/><span id=double-check-value>'+file+'</span> ?<br/><img src="./storage/'+folder+'/'+file+'" style="height:25%"><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><a href="./php/rmfile.php?folder='+folder+'&file='+file+ '&scroll='+scrollBarPosition()+'">☑️ Supprimer</a></div></div>';
           }
           function doEditFile(folder, file, desc){
-            document.getElementById("popup").innerHTML = '<div id=double-check>Modifier le fichier<br/><span id=double-check-value>'+file+'</span> ?<br/><img src="./storage/'+folder+'/'+file+'" style="height:25%"><br/><form method=POST action="./php/edit-file.php" enctype="multipart/form-data"><input type="hidden" name="album_name" value="'+folder+'"><input type="hidden" name="file_name" value="'+file+'"><label for=file_new_name>Nom du fichier : </label><input name=file_new_name type=text placeholder="IMG_yyyymmdd_hhmmss.jpg"><br/><label for=description>Description : </label><input name=description type=text value="'+desc+'"><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Changer"></div></form></div>';
+            document.getElementById("popup").innerHTML = '<div id=double-check>Modifier le fichier<br/><span id=double-check-value>'+file+'</span> ?<br/><img src="./storage/'+folder+'/'+file+'" style="height:25%"><br/><form method=POST action="./php/edit-file.php" enctype="multipart/form-data"><input type="hidden" name="scroll" value="'+scrollBarPosition()+'"><input type="hidden" name="album_name" value="'+folder+'"><input type="hidden" name="file_name" value="'+file+'"><label for=file_new_name>Nom du fichier : </label><input name=file_new_name type=text placeholder="IMG_yyyymmdd_hhmmss.jpg"><br/><label for=description>Description : </label><input name=description type=text value="'+desc+'"><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><input type=submit class=input-submit value="☑️ Changer"></div></form></div>';
           }
         </script>
     </head>
@@ -66,7 +65,7 @@ session_start();
           <?php
             echo $_GET['a'];
             if(isset($_SESSION['edit_mode']) AND $_SESSION['edit_mode'] == 'on'){
-              echo '<a onclick="doEditInfo(`'.$_GET['a'].'`)" title="Modifier les informations ?">✏️</a> <a onclick="doAddPicture(`'.$_GET['a'].'`)" title="Ajouter des images ?">🖼️</a>';
+              echo ' <span style="font-size:0.68em"><a onclick="doEditInfo(`'.$_GET['a'].'`)" title="Modifier les informations ?">✏️</a> <a onclick="doAddPicture(`'.$_GET['a'].'`)" title="Ajouter des images ?">🖼️</a></span>';
             }
           ?>
           </h1>
