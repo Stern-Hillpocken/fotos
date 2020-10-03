@@ -15,7 +15,7 @@ session_start();
             document.getElementById("popup").innerHTML = '';
           }
           function doRemoveFolder(folder){
-            document.getElementById("popup").innerHTML = '<div id=double-check>Voulez vous supprimer le dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><a href="./php/rmdir.php?folder='+folder+'">☑️ Supprimer</a></div></div>';
+            document.getElementById("popup").innerHTML = '<div id=double-check>Voulez vous supprimer le dossier<br/><span id=double-check-value>'+folder+'</span> ?<br/><br/><div class=yes-or-no><a onclick=clearPopup()>❎ Annuler</a></div><div class=yes-or-no><a href="./php/rmdir.php?folder='+folder+'">☑️ Supprimer</a></div></div>';
           }
         </script>
     </head>

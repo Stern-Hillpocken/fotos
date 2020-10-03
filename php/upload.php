@@ -39,7 +39,9 @@ if (!isset($_SESSION['password']) OR $_SESSION['password'] != "mdp")
 					 $informations = fopen('../storage/'.$dossier.'/informations.txt', 'a+');
 					 fputs($informations, "\n".'#'.$fichier.' ');
 					 fclose($informations);
-					 $_SESSION['feedback'] .= '<br/>✔️ Transfert effectué.';
+					 if(preg_match('/Transfert effectué/', $_SESSION['feedback']) !== 1){
+						 $_SESSION['feedback'] .= '<br/>✔️ Transfert effectué';
+					 }
 		     } else {
 					 $erreurs .= '<br/><span class=hightlight>⚠️ '.$fichier.' upload impossible !</span>';
 				 }
@@ -47,7 +49,7 @@ if (!isset($_SESSION['password']) OR $_SESSION['password'] != "mdp")
 	}//end for
 
 	if($erreurs !== ''){
-		$_SESSION['feedback'] .= '<br/><span class=hightlight>'.$erreurs.'</span>';
+		$_SESSION['feedback'] .= $erreurs;
 	}
 	header('Location: ../album.php?a='.$_POST['album_name']);
 }

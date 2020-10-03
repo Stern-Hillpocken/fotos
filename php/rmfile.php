@@ -21,7 +21,7 @@
 
     //DELETE FILE
     deleteFile('../storage/'.$_GET['folder'].'/'.$_GET['file']);
-    $_SESSION['feedback'] .= '<br/>✔️ Suppression de l\'image effectuée.';
+    $_SESSION['feedback'] .= '<br/>✔️ Suppression de l\'image';
     $_SESSION['scroll'] = $_GET['scroll'];
     header('Location: ../album.php?a='.$_GET['folder']);
   } else {

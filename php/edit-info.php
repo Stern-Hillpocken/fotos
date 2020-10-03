@@ -23,7 +23,7 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp") {
 //
     if(!isset($erreur)){
       if($dossier !== $_POST['album_name']){
-        $_SESSION['feedback'] .= '<br/>✔️ Nom de dossier changé : '.$_POST['album_name'].' > '.$dossier;
+        $_SESSION['feedback'] .= '<br/>✔️ Nom de dossier changé';
         rename('../storage/'.$_POST['album_name'], '../storage/'.$dossier);
         $_POST['album_name'] = $dossier;
       } else {
@@ -59,8 +59,27 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp") {
     $contents = str_replace('<info></info>', '<info>'.$info.'</info>', $contents);
 
     file_put_contents($dir, $contents);
-    $_SESSION['feedback'] .= '<br/>✔️ Informations mises à jour.';
+    $_SESSION['feedback'] .= '<br/>✔️ Informations mises à jour';
   }
+
+  //options
+  $dir = '../storage/'.$_POST['album_name'].'/informations.txt';
+  $contents = file_get_contents($dir);
+  preg_match("\n/#".'options (...*)/', $contents, $options);
+  if(isset($options[1])){//si il y a des options
+    if(!isset($_POST['separation'])){
+      $contents = str_replace($options[0], str_replace('separation', '', $options[0]), $contents);
+      file_put_contents($dir, $contents);
+      $_SESSION['feedback'] .= '<br/>✔️ Suppression séparateur';
+    }
+  } else {//si il n'y a pas d'options
+    if(isset($_POST['separation'])){
+      $contents = str_replace('#options ', '#options separation', $contents);
+      file_put_contents($dir, $contents);
+      $_SESSION['feedback'] .= '<br/>✔️ Affichage séparateur';
+    }
+  }
+
   header('Location: ../album.php?a='.$_POST['album_name']);
 } else {
   header('Location: ./../');

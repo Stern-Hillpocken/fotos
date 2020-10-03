@@ -19,7 +19,7 @@ var intervalID = window.setInterval(feedbackTransition, 2000);
 
 <?php
 
-echo '<a href=http://localhost/fotos/ style="color:black"><div><img alt="logo" src="./assets/logo.png"> <span>FOTOS</span></div></a>';
+echo '<a href=http://localhost/fotos/ style="color:black"><div><img alt="logo" src="./assets/logo.png"> <span style="font-size: 1.5em;vertical-align: middle;">FOTOS</span></div></a>';
 
 if (!isset($_SESSION['password']) OR $_SESSION['password'] != "mdp"){
 	echo '<div>Se connecter : <form action="./php/login.php" method="post"><input maxlength="10" size="10" placeholder="password" type="password" name="password" required><input type="hidden" name="uri" value="'.$_SERVER['REQUEST_URI'].'"><input type="submit"></form></div>';

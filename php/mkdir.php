@@ -20,9 +20,9 @@ if (isset($_SESSION['password']) AND $_SESSION['password'] == "mdp" AND $_POST['
 //
   if(!isset($erreur)){
 	     if(mkdir('../storage/'.$dossier, 0707)){
-	          $_SESSION['feedback'] .= '<br/>✔️ Dossier créé avec succès !';
+	          $_SESSION['feedback'] .= '<br/>✔️ Dossier créé';
             $informations = fopen('../storage/'.$dossier.'/informations.txt', 'a+');
-            fputs($informations, "<info>Description du dossier...</info>");
+            fputs($informations, "<info>Description du dossier...</info>\n#options ");
             fclose($informations);
             header('Location: ../');
 	     } else {
